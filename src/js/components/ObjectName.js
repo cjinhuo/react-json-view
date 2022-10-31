@@ -9,11 +9,10 @@ export default function getObjectName(props) {
         theme,
         jsvRoot,
         name,
-        displayArrayKey
+        displayArrayKey,
+        KeyWrapper
     } = props;
-
     const display_name = props.name ? props.name : '';
-
     if (jsvRoot && (name === false || name === null)) {
         return <span />;
     } else if (parent_type == 'array') {
@@ -29,13 +28,17 @@ export default function getObjectName(props) {
         return (
             <span {...Theme(theme, 'object-name')} key={namespace}>
                 <span class="object-key">
-                    {quotesOnKeys && (
-                        <span style={{ verticalAlign: 'top' }}>"</span>
-                    )}
-                    <span>{display_name}</span>
-                    {quotesOnKeys && (
-                        <span style={{ verticalAlign: 'top' }}>"</span>
-                    )}
+                    <KeyWrapper
+                        path={namespace.slice(1, namespace.length).join('/')}
+                    >
+                        {quotesOnKeys && (
+                            <span style={{ verticalAlign: 'top' }}>"</span>
+                        )}
+                        <span>{display_name}</span>
+                        {quotesOnKeys && (
+                            <span style={{ verticalAlign: 'top' }}>"</span>
+                        )}
+                    </KeyWrapper>
                 </span>
                 <span {...Theme(theme, 'colon')}>:</span>
             </span>

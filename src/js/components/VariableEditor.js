@@ -55,7 +55,9 @@ class VariableEditor extends React.PureComponent {
             onDelete,
             onSelect,
             displayArrayKey,
-            quotesOnKeys
+            quotesOnKeys,
+            ValueWrapper,
+            KeyWrapper
         } = this.props;
         const { editMode } = this.state;
         return (
@@ -72,70 +74,89 @@ class VariableEditor extends React.PureComponent {
                 class="variable-row"
                 key={variable.name}
             >
-                {type == 'array' ? (
-                    displayArrayKey ? (
-                        <span
-                            {...Theme(theme, 'array-key')}
-                            key={variable.name + '_' + namespace}
-                        >
-                            {variable.name}
-                            <div {...Theme(theme, 'colon')}>:</div>
-                        </span>
-                    ) : null
-                ) : (
-                    <span>
-                        <span
-                            {...Theme(theme, 'object-name')}
-                            class="object-key"
-                            key={variable.name + '_' + namespace}
-                        >
-                            {!!quotesOnKeys && (
-                                <span style={{ verticalAlign: 'top' }}>"</span>
-                            )}
-                            <span style={{ display: 'inline-block' }}>
-                                {variable.name}
-                            </span>
-                            {!!quotesOnKeys && (
-                                <span style={{ verticalAlign: 'top' }}>"</span>
-                            )}
-                        </span>
-                        <span {...Theme(theme, 'colon')}>:</span>
-                    </span>
-                )}
-                <div
-                    class="variable-value"
-                    onClick={
-                        onSelect === false && onEdit === false
-                            ? null
-                            : e => {
-                                  let location = [...namespace];
-                                  if (
-                                      (e.ctrlKey || e.metaKey) &&
-                                      onEdit !== false
-                                  ) {
-                                      this.prepopInput(variable);
-                                  } else if (onSelect !== false) {
-                                      location.shift();
-                                      onSelect({
-                                          ...variable,
-                                          namespace: location
-                                      });
-                                  }
-                              }
-                    }
-                    {...Theme(theme, 'variableValue', {
-                        cursor: onSelect === false ? 'default' : 'pointer'
-                    })}
+                <KeyWrapper
+                    path={`${namespace.slice(1, namespace.length).join('/')}/${
+                        variable.name
+                    }`}
                 >
-                    {this.getValue(variable, editMode)}
-                </div>
+                    {type == 'array' ? (
+                        displayArrayKey ? (
+                            <span
+                                {...Theme(theme, 'array-key')}
+                                key={variable.name + '_' + namespace}
+                            >
+                                {variable.name}
+                                <div {...Theme(theme, 'colon')}>:</div>
+                            </span>
+                        ) : null
+                    ) : (
+                        <span>
+                            <span
+                                {...Theme(theme, 'object-name')}
+                                class="object-key"
+                                key={variable.name + '_' + namespace}
+                            >
+                                {!!quotesOnKeys && (
+                                    <span style={{ verticalAlign: 'top' }}>
+                                        "
+                                    </span>
+                                )}
+                                <span style={{ display: 'inline-block' }}>
+                                    {variable.name}
+                                </span>
+                                {!!quotesOnKeys && (
+                                    <span style={{ verticalAlign: 'top' }}>
+                                        "
+                                    </span>
+                                )}
+                            </span>
+                            <span {...Theme(theme, 'colon')}>:</span>
+                        </span>
+                    )}
+                </KeyWrapper>
+                <ValueWrapper
+                    path={`${namespace.slice(1, namespace.length).join('/')}/${
+                        variable.name
+                    }`}
+                >
+                    <div
+                        class="variable-value"
+                        onClick={
+                            onSelect === false && onEdit === false
+                                ? null
+                                : e => {
+                                      let location = [...namespace];
+                                      if (
+                                          (e.ctrlKey || e.metaKey) &&
+                                          onEdit !== false
+                                      ) {
+                                          this.prepopInput(variable);
+                                      } else if (onSelect !== false) {
+                                          location.shift();
+                                          onSelect({
+                                              ...variable,
+                                              namespace: location
+                                          });
+                                      }
+                                  }
+                        }
+                        {...Theme(theme, 'variableValue', {
+                            cursor: onSelect === false ? 'default' : 'pointer'
+                        })}
+                    >
+                        {this.getValue(variable, editMode)}
+                    </div>
+                </ValueWrapper>
                 {enableClipboard ? (
                     <CopyToClipboard
                         rowHovered={this.state.hovered}
                         hidden={editMode}
                         src={variable.value}
                         clickCallback={enableClipboard}
-                        {...{ theme, namespace: [...namespace, variable.name] }}
+                        {...{
+                            theme,
+                            namespace: [...namespace, variable.name]
+                        }}
                     />
                 ) : null}
                 {onEdit !== false && editMode == false
