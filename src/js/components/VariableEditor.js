@@ -1,6 +1,6 @@
 import React from 'react';
 import AutosizeTextarea from 'react-textarea-autosize';
-
+import DefaultWrapper from './common';
 import { toType } from './../helpers/util';
 import dispatcher from './../helpers/dispatcher';
 import parseInput from './../helpers/parseInput';
@@ -59,6 +59,9 @@ class VariableEditor extends React.PureComponent {
             ValueWrapper,
             KeyWrapper
         } = this.props;
+        const FinalKeyWrapper = KeyWrapper || DefaultWrapper;
+        const FinalValueWrapper = ValueWrapper || DefaultWrapper;
+
         const { editMode } = this.state;
         return (
             <div
@@ -74,7 +77,7 @@ class VariableEditor extends React.PureComponent {
                 class="variable-row"
                 key={variable.name}
             >
-                <KeyWrapper
+                <FinalKeyWrapper
                     path={`${namespace.slice(1, namespace.length).join('/')}${
                         namespace.slice(1, namespace.length).length > 0
                             ? '/'
@@ -115,8 +118,8 @@ class VariableEditor extends React.PureComponent {
                             <span {...Theme(theme, 'colon')}>:</span>
                         </span>
                     )}
-                </KeyWrapper>
-                <ValueWrapper
+                </FinalKeyWrapper>
+                <FinalValueWrapper
                     path={`${namespace.slice(1, namespace.length).join('/')}${
                         namespace.slice(1, namespace.length).length > 0
                             ? '/'
@@ -150,7 +153,7 @@ class VariableEditor extends React.PureComponent {
                     >
                         {this.getValue(variable, editMode)}
                     </div>
-                </ValueWrapper>
+                </FinalValueWrapper>
                 {enableClipboard ? (
                     <CopyToClipboard
                         rowHovered={this.state.hovered}

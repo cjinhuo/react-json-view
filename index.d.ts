@@ -1,8 +1,8 @@
 import * as React from 'react';
 
 export interface ReactJsonViewProps {
-  KeyWrapper:  React.FC<{children: React.ReactNode, path: string}>
-  ValueWrapper: React.FC<{children: React.ReactNode, path: string}>
+  KeyWrapper?:  React.FC<{children: React.ReactNode, path: string}>
+  ValueWrapper?: React.FC<{children: React.ReactNode, path: string}>
   /**
    * This property contains your input JSON.
    *

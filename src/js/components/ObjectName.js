@@ -1,4 +1,5 @@
 import React from 'react';
+import DefaultWrapper from './common';
 import Theme from './../themes/getStyle';
 
 export default function getObjectName(props) {
@@ -12,17 +13,18 @@ export default function getObjectName(props) {
         displayArrayKey,
         KeyWrapper
     } = props;
+    const FinalKeyWrapper = KeyWrapper || DefaultWrapper;
     const display_name = props.name ? props.name : '';
     if (jsvRoot && (name === false || name === null)) {
         return <span />;
     } else if (parent_type == 'array') {
         return displayArrayKey ? (
             <span {...Theme(theme, 'array-key')} key={namespace}>
-                <KeyWrapper
+                <FinalKeyWrapper
                     path={namespace.slice(1, namespace.length).join('/')}
                 >
                     <span class="array-key">{display_name}</span>
-                </KeyWrapper>
+                </FinalKeyWrapper>
                 <span {...Theme(theme, 'colon')}>:</span>
             </span>
         ) : (
@@ -32,7 +34,7 @@ export default function getObjectName(props) {
         return (
             <span {...Theme(theme, 'object-name')} key={namespace}>
                 <span class="object-key">
-                    <KeyWrapper
+                    <FinalKeyWrapper
                         path={namespace.slice(1, namespace.length).join('/')}
                     >
                         {quotesOnKeys && (
@@ -42,7 +44,7 @@ export default function getObjectName(props) {
                         {quotesOnKeys && (
                             <span style={{ verticalAlign: 'top' }}>"</span>
                         )}
-                    </KeyWrapper>
+                    </FinalKeyWrapper>
                 </span>
                 <span {...Theme(theme, 'colon')}>:</span>
             </span>
