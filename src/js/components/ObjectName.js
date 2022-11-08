@@ -18,7 +18,11 @@ export default function getObjectName(props) {
     } else if (parent_type == 'array') {
         return displayArrayKey ? (
             <span {...Theme(theme, 'array-key')} key={namespace}>
-                <span class="array-key">{display_name}</span>
+                <KeyWrapper
+                    path={namespace.slice(1, namespace.length).join('/')}
+                >
+                    <span class="array-key">{display_name}</span>
+                </KeyWrapper>
                 <span {...Theme(theme, 'colon')}>:</span>
             </span>
         ) : (

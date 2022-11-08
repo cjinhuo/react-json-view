@@ -75,9 +75,11 @@ class VariableEditor extends React.PureComponent {
                 key={variable.name}
             >
                 <KeyWrapper
-                    path={`${namespace.slice(1, namespace.length).join('/')}/${
-                        variable.name
-                    }`}
+                    path={`${namespace.slice(1, namespace.length).join('/')}${
+                        namespace.slice(1, namespace.length).length > 0
+                            ? '/'
+                            : ''
+                    }${variable.name}`}
                 >
                     {type == 'array' ? (
                         displayArrayKey ? (
@@ -115,9 +117,11 @@ class VariableEditor extends React.PureComponent {
                     )}
                 </KeyWrapper>
                 <ValueWrapper
-                    path={`${namespace.slice(1, namespace.length).join('/')}/${
-                        variable.name
-                    }`}
+                    path={`${namespace.slice(1, namespace.length).join('/')}${
+                        namespace.slice(1, namespace.length).length > 0
+                            ? '/'
+                            : ''
+                    }${variable.name}`}
                 >
                     <div
                         class="variable-value"
